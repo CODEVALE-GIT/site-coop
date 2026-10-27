@@ -1,0 +1,295 @@
+/* =========================================================
+   CODEVALE — folha de estilo do site
+   Identidade visual: versão clara (fundo areia, logo marrom)
+   Cada página cabe em uma tela no computador, sem rolar.
+   Para trocar as cores do site inteiro, mude só este bloco.
+   ========================================================= */
+:root {
+  --bg: #F7F2E3;          /* fundo da página (areia clara) */
+  --sand: #E7DDBA;        /* areia do logo: cabeçalho e cartões */
+  --ink: #3C2D02;         /* marrom do logo: texto principal */
+  --muted: #6B5B33;       /* texto secundário */
+  --green: #2F3E00;       /* Verde Cerrado Profundo */
+  --gold: #FF9F00;        /* Ouro do Pôr do Sol */
+  --areia: #E4BA69;       /* Areia Dourada do Araguaia */
+  --ocre: #B98232;        /* Ocre do Cerrado Seco */
+  --line: #DCCFA4;        /* bordas */
+  --radius: 12px;
+  --max: 1180px;
+  --font: 'Archivo', system-ui, sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+/* Em telas grandes o site é ampliado por inteiro (zoom calculado em js no <head>, guardado em --z),
+   para manter a mesma proporção do notebook. --vh e --vw são a altura e a largura da tela já descontando esse zoom. */
+:root { --z: 1; --vh: calc(100vh / var(--z)); --vw: calc(100vw / var(--z)); }
+html { height: 100%; }
+body { zoom: var(--z); }
+body {
+  font-family: var(--font); background: var(--bg); color: var(--ink); line-height: 1.55;
+  display: flex; flex-direction: column; min-height: var(--vh);
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+.container { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+.skip-link { position: absolute; left: -999px; top: 8px; z-index: 999; background: var(--gold); color: var(--ink); padding: 8px 14px; border-radius: 8px; }
+.skip-link:focus { left: 8px; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+/* ---------- Topo ---------- */
+.topbar { background: var(--sand); border-bottom: 1px solid var(--line); position: relative; z-index: 50; }
+.topbar .container { display: flex; align-items: center; justify-content: space-between; height: 76px; gap: 20px; }
+.brand-link img { height: 46px; width: auto; }
+.menu ul { list-style: none; display: flex; gap: 6px; }
+.menu a { display: block; text-decoration: none; font-weight: 600; font-size: .95rem; padding: 8px 14px; border-radius: 8px; }
+.menu a:hover { background: rgba(60, 45, 2, .08); }
+.menu a[aria-current="page"] { background: var(--green); color: var(--bg); }
+.menu-toggle { display: none; width: 44px; height: 44px; border-radius: 10px; background: transparent; border: 1px solid var(--ink); color: var(--ink); cursor: pointer; place-items: center; }
+.menu-toggle svg { width: 22px; height: 22px; }
+
+/* Faixa de cotações
+   O widget do TradingView define a altura do próprio quadro e às vezes
+   fica baixo demais, cortando a linha da variação. A altura abaixo garante
+   espaço para nome, preço e variação. */
+.quotes-bar { background: var(--green); flex-shrink: 0; position: relative; height: 76px; overflow: hidden; } /* altura fixa: o widget às vezes cresce alguns pixels e fazia a página rolar */
+.quotes-bar .tradingview-widget-container { height: 76px; }
+/* Aviso mostrado enquanto o TradingView ainda não trouxe os valores */
+.quotes-loading { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center;
+  color: rgba(255,255,255,.75); font-size: .85rem; letter-spacing: .02em; pointer-events: none; transition: opacity .3s; }
+.quotes-loading::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; vertical-align: -1px;
+  border: 2px solid rgba(255,255,255,.35); border-top-color: #fff; border-radius: 50%; animation: girar .8s linear infinite; }
+@keyframes girar { to { transform: rotate(360deg); } }
+.quotes-bar.pronto .quotes-loading { opacity: 0; }
+.topbar, .site-footer { flex-shrink: 0; }
+.quotes-bar iframe { height: 76px !important; display: block; }
+
+/* ---------- Conteúdo: ocupa o espaço entre o topo e o rodapé ---------- */
+/* O conteúdo começa sempre na mesma altura em todas as abas (o título não "pula" ao trocar de aba)
+   e fica perto do centro da tela. --chrome = cabeçalho + cotações + rodapé; 340px = altura de referência
+   do conteúdo. */
+body { --chrome: 205px; --pad-min: 40px; --pad-bot: 28px; --pad-top: max(var(--pad-min), calc((var(--vh) - var(--chrome) - 340px) / 2)); }
+main { flex: 1; display: flex; align-items: flex-start; padding: var(--pad-top) 0 var(--pad-bot); }
+.tab { width: 100%; }
+.tab[hidden] { display: none; }
+.eyebrow { display: block; font-size: .78rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ocre); margin-bottom: 10px; }
+h1 { font-weight: 800; font-stretch: 125%; font-size: clamp(2rem, calc(var(--vw) * .036), 3rem); line-height: 1.05; letter-spacing: -0.01em; text-transform: uppercase; margin-bottom: 16px; text-wrap: balance; }
+h1 .hl { color: var(--green); }
+h2 { font-weight: 800; font-stretch: 115%; font-size: 1.3rem; line-height: 1.2; text-transform: uppercase; margin-bottom: 10px; }
+.lead { font-size: 1.08rem; color: var(--muted); max-width: 560px; }
+.actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 26px; }
+
+/* Botões */
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 24px; border-radius: 999px; font: 700 .92rem var(--font); text-decoration: none; border: 2px solid transparent; cursor: pointer; }
+.btn svg { width: 16px; height: 16px; }
+.btn-primary { background: var(--green); color: var(--bg); }
+.btn-primary:hover { background: #3f5300; }
+.btn-ghost { border-color: var(--ink); color: var(--ink); background: transparent; }
+.btn-ghost:hover { background: var(--ink); color: var(--bg); }
+
+/* ---------- Início ---------- */
+.home { display: grid; grid-template-columns: 1.25fr 1fr; gap: 56px; align-items: start; }
+/* Mapa da área de atuação: a altura acompanha o espaço livre da tela, para a aba caber sem rolar */
+.home-mapa { display: grid; justify-items: center; gap: 8px; }
+.home-mapa img { height: clamp(220px, calc(var(--vh) - var(--chrome) - var(--pad-top) - var(--pad-bot) - 40px), 520px); width: auto; max-width: 100%; object-fit: contain; }
+.home-mapa figcaption { display: flex; align-items: center; gap: 8px; font-size: .85rem; font-weight: 600; color: var(--muted); }
+.mapa-legenda { width: 14px; height: 14px; border-radius: 3px; background: var(--green); flex-shrink: 0; }
+
+/* ---------- Cartões ---------- */
+.cards-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 28px; }
+.cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 28px; }
+.card { background: var(--sand); border-radius: var(--radius); padding: 28px; }
+.card .ico { width: 52px; height: 52px; border-radius: 12px; background: var(--green); color: var(--gold); display: grid; place-items: center; margin-bottom: 16px; }
+.card .ico svg { width: 28px; height: 28px; }
+.checklist { list-style: none; display: grid; gap: 8px; margin-top: 12px; }
+.checklist li { padding-left: 20px; position: relative; }
+.checklist li::before { content: ''; position: absolute; left: 0; top: .6em; width: 8px; height: 8px; border-radius: 2px; background: var(--gold); }
+
+/* ---------- Áreas de Negócio ---------- */
+.areas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 22px; }
+.area { display: flex; flex-direction: column; gap: 8px; }
+.area-foto { position: relative; height: clamp(110px, calc(var(--vh) - var(--chrome) - var(--pad-top) - var(--pad-bot) - 250px), 280px); border-radius: var(--radius); overflow: hidden; background: var(--green); display: grid; place-items: center; }
+.area-foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.area-ico { color: var(--gold); }
+.area-ico svg { width: 56px; height: 56px; }
+.area h2 { margin: 6px 0 0; }
+.area-email { display: inline-flex; align-items: center; gap: 8px; color: var(--ink); font-weight: 600; text-decoration: none; }
+.area-email:hover { color: var(--green); text-decoration: underline; }
+.area-email svg { width: 18px; height: 18px; color: var(--ocre); flex-shrink: 0; }
+.area-email span { min-width: 0; overflow-wrap: anywhere; }
+
+/* ---------- História ---------- */
+/* Texto à esquerda; vídeo largo (16:9) à direita, com botões para alternar entre vídeo e foto.
+   A largura do vídeo também é limitada pela altura da tela, para a aba não precisar rolar. */
+.history { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 40px; align-items: start; }
+.history-media { width: min(620px, calc(var(--vw) * .52), calc((var(--vh) - var(--chrome) - var(--pad-top) - var(--pad-bot) - 90px) * 16 / 9)); min-width: 0; justify-self: end; }
+.media-switch { display: inline-flex; gap: 4px; background: var(--sand); padding: 4px; border-radius: 999px; margin-bottom: 10px; }
+.media-switch button { font: 700 .85rem var(--font); color: var(--ink); background: transparent; border: 0; padding: 6px 16px; border-radius: 999px; cursor: pointer; }
+.media-switch button[aria-pressed="true"] { background: var(--green); color: var(--bg); }
+.media-box { aspect-ratio: 16 / 9; width: 100%; border-radius: var(--radius); overflow: hidden; background: var(--green); }
+.media-box video, .media-box img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.media-box img { object-position: center 40%; }
+.media-box [hidden] { display: none; }
+.media-caption { font-size: .8rem; color: var(--muted); margin-top: 6px; }
+.founded { display: flex; width: fit-content; max-width: 100%; align-items: center; gap: 18px; margin-top: 26px; background: var(--sand); border-radius: var(--radius); padding: 20px 28px 20px 20px; border-left: 5px solid var(--gold); }
+.founded-date { background: var(--green); color: var(--bg); border-radius: 10px; padding: 12px 16px; font-weight: 800; font-stretch: 125%; text-transform: uppercase; line-height: 1.1; text-align: center; font-size: 1.05rem; }
+.founded-text { color: var(--muted); min-width: 0; }
+.founded-text strong { display: block; color: var(--ink); font-weight: 800; font-stretch: 115%; text-transform: uppercase; font-size: 1.1rem; }
+
+/* ---------- Notícias ---------- */
+.news-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; flex-wrap: wrap; }
+.news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 4px; }
+.news-card { display: flex; flex-direction: column; text-decoration: none; background: var(--sand); border-radius: var(--radius); padding: 22px; border-top: 5px solid var(--ocre); }
+.news-card.cat-graos { border-top-color: var(--gold); }
+.news-card.cat-pecuaria { border-top-color: var(--ocre); }
+.news-card.cat-institucional { border-top-color: var(--green); }
+.news-card:hover { background: #e0d4aa; }
+.news-card .meta { display: flex; justify-content: space-between; gap: 10px; white-space: nowrap; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 10px; }
+.news-card h2 { font-stretch: 100%; text-transform: none; font-size: 1.08rem; line-height: 1.3; margin-bottom: 8px; }
+.news-card p { font-size: .92rem; color: var(--muted); flex: 1; }
+.news-card .more { margin-top: 14px; font-weight: 700; font-size: .88rem; color: var(--green); }
+.pager { display: flex; gap: 10px; }
+.news-controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.news-switch { margin: 0; }
+.news-card.has-img { overflow: hidden; }
+.news-thumb { margin: -22px -22px 14px; height: clamp(56px, calc(var(--vh) - var(--chrome) - var(--pad-top) - var(--pad-bot) - 330px), 170px); background: var(--green); overflow: hidden; }
+.news-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.news-thumb.sem-img { height: 6px; }
+.news-card.has-img p { -webkit-line-clamp: 2; }
+.news-card.has-img h2 { -webkit-line-clamp: 2; }
+.news-empty { grid-column: 1 / -1; background: var(--sand); border-radius: var(--radius); padding: 22px; color: var(--muted); }
+.news-card .meta span { overflow: hidden; text-overflow: ellipsis; }
+.news-card h2 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.news-card p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.pager button { min-width: 44px; font: 700 .88rem var(--font); background: transparent; border: 2px solid var(--ink); color: var(--ink); padding: 8px 16px; border-radius: 999px; cursor: pointer; }
+.pager button:disabled { opacity: .35; cursor: default; }
+.article { max-width: 740px; }
+.article .meta { font-size: .82rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--ocre); margin-bottom: 12px; }
+.article h1 { text-transform: none; font-stretch: 100%; font-size: clamp(1.7rem, calc(var(--vw) * .035), 2.4rem); }
+.article .content p { margin-bottom: 14px; font-size: 1.05rem; }
+.back-link { display: inline-block; color: var(--green); font-weight: 700; text-decoration: none; margin-bottom: 20px; }
+
+/* ---------- Contato ---------- */
+.contact { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 48px; align-items: start; }
+.contact-list { margin-top: 26px; display: grid; gap: 4px; }
+.contact-item { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.contact-item svg { width: 22px; height: 22px; color: var(--ocre); flex-shrink: 0; margin-top: 2px; }
+.contact-item strong { display: block; font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.contact-item a, .contact-item span { font-weight: 600; }
+/* Os cartões dividem as mesmas colunas (subgrid), assim todos os e-mails começam na mesma linha vertical */
+.contact-cards { display: grid; gap: 10px; grid-template-columns: calc(44px + 18px) minmax(0, 1fr) auto; column-gap: 16px; } /* 18px = padding do cartão */
+.contact-cards > .contact-card { grid-column: 1 / -1; grid-template-columns: subgrid; }
+.contact-card { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 16px; align-items: center; background: var(--sand); border-radius: var(--radius); padding: 14px 18px; }
+.contact-card > div { min-width: 0; }
+.contact-card .ico { width: 44px; height: 44px; border-radius: 10px; background: var(--green); color: var(--gold); display: grid; place-items: center; }
+.contact-card .ico svg { width: 24px; height: 24px; }
+.contact-card h2 { font-size: 1rem; margin: 0 0 2px; }
+.contact-card p { font-size: .88rem; color: var(--muted); }
+.contact-card .area-email { font-size: .9rem; white-space: nowrap; justify-self: start; }
+
+/* ---------- Menu ao clicar num e-mail ---------- */
+.email-menu { position: fixed; z-index: 200; min-width: 240px; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 10px 30px rgba(60, 45, 2, .18); padding: 6px; display: grid; }
+.email-menu a, .email-menu button { display: block; text-align: left; font: 600 .9rem var(--font); color: var(--ink); text-decoration: none; background: none; border: 0; padding: 10px 12px; border-radius: 6px; cursor: pointer; }
+.email-menu a:hover, .email-menu button:hover, .email-menu a:focus-visible, .email-menu button:focus-visible { background: var(--sand); }
+
+/* ---------- Rodapé (uma linha) ---------- */
+.site-footer { background: var(--green); color: var(--bg); font-size: .85rem; }
+.site-footer .container { display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 52px; padding-top: 10px; padding-bottom: 10px; flex-wrap: wrap; }
+.site-footer a { text-decoration: none; }
+.footer-contato { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
+.site-footer a:hover { color: var(--gold); }
+
+/* ---------- Telas baixas (notebook, navegador com barras, zoom) ----------
+   Compacta espaços para cada aba continuar cabendo sem rolar. */
+/* (classe 'compacto' posta pelo js quando a altura útil, já descontando o zoom, é até 820px no computador) */
+html.compacto .topbar .container { height: 60px; }
+html.compacto .brand-link img { height: 38px; }
+html.compacto body { --chrome: 177px; --pad-min: 22px; --pad-bot: 14px; }
+html.compacto .eyebrow { margin-bottom: 6px; }
+html.compacto h1 { font-size: clamp(1.6rem, calc(var(--vh) * .062), 2.8rem); margin-bottom: 10px; }
+html.compacto .lead { font-size: 1rem; }
+html.compacto .actions { margin-top: 18px; }
+html.compacto .cards-2, html.compacto .cards-3 { margin-top: 16px; }
+html.compacto .card { padding: 18px 20px; }
+html.compacto .card .ico { width: 40px; height: 40px; margin-bottom: 10px; }
+html.compacto .card .ico svg { width: 24px; height: 24px; }
+html.compacto .checklist { gap: 4px; margin-top: 8px; }
+html.compacto .news-grid { margin-top: 0; }
+html.compacto .news-card { padding: 16px 18px; }
+html.compacto .news-thumb { margin: -16px -18px 10px; height: clamp(48px, calc(var(--vh) - var(--chrome) - var(--pad-top) - var(--pad-bot) - 290px), 150px); }
+html.compacto .news-card .more { margin-top: 8px; }
+html.compacto .contact-list { margin-top: 12px; }
+html.compacto .contact-item { padding: 10px 0; }
+html.compacto .contact-cards { gap: 8px; grid-template-columns: calc(38px + 16px) minmax(0, 1fr) auto; }
+html.compacto .contact-card { padding: 10px 16px; }
+html.compacto .contact-card .ico { width: 38px; height: 38px; }
+html.compacto .founded { margin-top: 18px; padding: 14px 20px 14px 14px; }
+html.compacto .site-footer .container { min-height: 40px; padding-top: 6px; padding-bottom: 6px; }
+/* Telas bem baixas: aperta a lista de contato para a aba caber sem rolar */
+/* (classe 'baixo' quando a altura útil é até 600px) */
+html.baixo .contact-list { margin-top: 4px; }
+html.baixo .contact-item { padding: 4px 0; }
+html.baixo .contact .lead { margin-top: 6px; }
+
+/* ---------- Telas menores (no celular a página rola normalmente) ---------- */
+@media (max-width: 900px) {
+  /* No celular a página rola: o conteúdo começa logo abaixo das cotações */
+  body { --pad-top: 28px; --pad-bot: 32px; }
+  .menu-toggle { display: grid; }
+  .menu { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--sand); border-bottom: 1px solid var(--line); padding: 8px 16px 16px; }
+  .menu.open { display: block; }
+  .menu ul { flex-direction: column; gap: 4px; }
+  .menu a { padding: 12px 14px; font-size: 1.05rem; }
+  .home, .contact, .history { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .home-mapa img { height: auto; max-height: 440px; }
+  .history-media { width: 100%; justify-self: stretch; }
+  .news-grid, .cards-3, .areas { grid-template-columns: 1fr; }
+  .area-foto { height: 200px; }
+  main { align-items: flex-start; }
+}
+@media (max-width: 600px) {
+  .cards-2 { grid-template-columns: 1fr; }
+  h1 { font-size: clamp(1.5rem, 7.4vw, 2rem); }
+  .contact-card { grid-template-columns: 44px minmax(0, 1fr); }
+  .contact-cards { grid-template-columns: calc(44px + 18px) minmax(0, 1fr); }
+  .contact-card .area-email { grid-column: 1 / -1; white-space: normal; }
+  .founded { flex-direction: column; align-items: flex-start; gap: 10px; padding: 16px; }
+  .history-media { gap: 8px; }
+  .brand-link img { height: 36px; }
+  .site-footer .container { justify-content: center; text-align: center; }
+}
+
+/* ---------- Parceiros ---------- */
+.parceiros { list-style: none; display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 10px; margin-top: 22px; }
+.parceiro { background: var(--sand); border-radius: var(--radius); border-bottom: 4px solid var(--gold); min-height: 62px; padding: 8px 6px;
+  display: grid; place-items: center; text-align: center; font-weight: 800; font-stretch: 100%; font-size: .78rem; color: var(--green); line-height: 1.15; overflow-wrap: anywhere; }
+html.compacto .parceiros { margin-top: 12px; gap: 7px; }
+html.compacto .parceiro { min-height: 50px; padding: 6px; font-size: .74rem; }
+@media (max-width: 900px) { .parceiros { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .parceiros { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; } .parceiro { min-height: 58px; font-size: .74rem; } }
+html.baixo .parceiro { min-height: 40px; padding: 4px; }
+html.baixo .parceiros { margin-top: 8px; gap: 6px; }
+/* com logo: mostra só a imagem; sem logo (arquivo ausente) continua o nome escrito */
+.parceiro { background: #fff; border: 1px solid var(--line); border-bottom: 4px solid var(--gold); }
+.parceiro img { max-width: 88%; max-height: 42px; width: auto; height: auto; object-fit: contain; }
+.parceiro img + span { display: none; }
+html.compacto .parceiro img { max-height: 34px; }
+html.baixo .parceiro img { max-height: 26px; }
+
+/* WhatsApp (aba Contato e rodapé) */
+.contact-whats svg { color: #25D366; }
+.contact-whats a { color: var(--green); }
+.whats-link { display: inline-flex; align-items: center; gap: 6px; }
+.whats-link svg { width: 16px; height: 16px; color: #25D366; flex-shrink: 0; }
+
+/* Contato em janelas mais estreitas: coluna do texto mais larga e lista mais justa, para não rolar */
+@media (min-width: 901px) and (max-width: 1240px) {
+  .contact { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; }
+  .contact-item { padding: 9px 0; }
+  .contact-card .area-email { font-size: .82rem; }
+  .history { gap: 28px; }
+  .home { gap: 32px; }
+  .lead, html.compacto .lead { font-size: .95rem; }
+  .actions, html.compacto .actions { margin-top: 14px; }
+  .home h1, html.compacto .home h1 { font-size: clamp(1.6rem, calc(var(--vw) * .034), 2.4rem); }
+  .history-media { width: min(620px, calc(var(--vw) * .44), calc((var(--vh) - var(--chrome) - var(--pad-top) - var(--pad-bot) - 90px) * 16 / 9)); }
+}
+html.compacto .contact .lead { font-size: .95rem; }

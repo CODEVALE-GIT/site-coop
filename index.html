@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CODEVALE | Cooperativa de Desenvolvimento do Vale do Araguaia</title>
+<meta name="description" content="CODEVALE, Cooperativa de Desenvolvimento do Vale do Araguaia. Integramos produtores rurais do Norte e do Sul do Vale do Araguaia para fortalecer o agronegócio regional.">
+<link rel="canonical" href="https://www.codevale.agr.br/">
+<meta name="theme-color" content="#E7DDBA">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="CODEVALE">
+<meta property="og:title" content="CODEVALE | Cooperativa de Desenvolvimento do Vale do Araguaia">
+<meta property="og:description" content="CODEVALE, Cooperativa de Desenvolvimento do Vale do Araguaia. Integramos produtores rurais do Norte e do Sul do Vale do Araguaia para fortalecer o agronegócio regional.">
+<meta property="og:url" content="https://www.codevale.agr.br/">
+<meta property="og:image" content="https://www.codevale.agr.br/img/og-codevale.jpg">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<!-- Abre a conexão com o TradingView logo no início, para a faixa de cotações carregar mais rápido -->
+<link rel="preconnect" href="https://s3.tradingview.com">
+<link rel="preconnect" href="https://www.tradingview-widget.com">
+<link rel="preconnect" href="https://widgetdata.tradingview.com">
+<link rel="preload" href="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" as="script">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap" rel="stylesheet">
+<script>
+/* Ajusta o tamanho do site à tela: em monitores grandes amplia tudo (zoom) para manter a proporção do notebook;
+   em telas baixas liga o modo compacto. Fica no <head> para já abrir no tamanho certo. */
+(function () {
+  var d = document.documentElement;
+  function ajustar() {
+    var w = window.innerWidth, h = window.innerHeight, z = 1;
+    if (w > 900) z = Math.max(1, Math.min(3, Math.round(Math.min(w / 1366, h / 680) * 100) / 100));
+    window.CODEVALE_ZOOM = z;
+    d.style.setProperty('--z', z);
+    d.classList.toggle('compacto', w > 900 && h / z <= 820);
+    d.classList.toggle('baixo', w > 900 && h / z <= 600);
+  }
+  ajustar();
+  window.addEventListener('resize', ajustar);
+})();
+</script>
+<link rel="stylesheet" href="css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "CODEVALE",
+  "legalName": "Cooperativa de Desenvolvimento do Vale do Araguaia",
+  "url": "https://www.codevale.agr.br/",
+  "logo": "https://www.codevale.agr.br/img/logo-codevale.png",
+  "telephone": "+55 62 9840-6963"
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<header class="topbar">
+  <div class="container">
+    <a class="brand-link" href="#inicio"><img src="img/logo-codevale.png" alt="CODEVALE, Cooperativa de Desenvolvimento do Vale do Araguaia" width="877" height="256"></a>
+    <nav class="menu" id="menu" aria-label="Principal">
+      <ul>
+        <li><a href="#inicio" aria-current="page">Início</a></li>
+        <li><a href="#historia">História</a></li>
+        <li><a href="#negocios">Áreas de Negócio</a></li>
+        <li><a href="#noticias">Notícias</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+    </nav>
+    <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  </div>
+</header>
+<div class="quotes-bar">
+  <span class="quotes-loading" aria-hidden="true">Carregando cotações…</span>
+  <div class="tradingview-widget-container">
+    <div class="tradingview-widget-container__widget"></div>
+    <script src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+    {
+      "symbols": [
+        {"proName": "OANDA:SOYBNUSD", "title": "Soja Chicago (US$/bu)"},
+        {"proName": "BMFBOVESPA:CCM1!", "title": "Milho B3"},
+        {"proName": "BMFBOVESPA:BGI1!", "title": "Boi Gordo B3"},
+        {"proName": "FX_IDC:USDBRL", "title": "Dólar"},
+        {"proName": "BMFBOVESPA:SJCF2027/2.2046", "title": "Soja Jan/27 (US$/bu)"},
+        {"proName": "BMFBOVESPA:SJCH2027/2.2046", "title": "Soja Mar/27 (US$/bu)"},
+        {"proName": "BMFBOVESPA:SJCK2027/2.2046", "title": "Soja Mai/27 (US$/bu)"},
+        {"proName": "BMFBOVESPA:SJCN2027/2.2046", "title": "Soja Jul/27 (US$/bu)"}
+      ],
+      "showSymbolLogo": false,
+      "isTransparent": true,
+      "displayMode": "compact",
+      "colorTheme": "dark",
+      "locale": "br"
+    }
+    </script>
+  </div>
+</div>
+<main id="conteudo">
+<!-- Cada aba do menu é uma <section class="tab"> abaixo. O js/main.js mostra só a aba escolhida,
+     sem recarregar a página (assim a faixa de cotações não precisa carregar de novo). -->
+<section class="tab" id="inicio" data-title="CODEVALE | Cooperativa de Desenvolvimento do Vale do Araguaia" aria-label="CODEVALE">
+<div class="container home">
+  <div>
+    <span class="eyebrow">Força · União · Território · Desenvolvimento</span>
+    <h1>Desenvolvendo <span class="hl">o Vale do Araguaia</span> juntos</h1>
+    <p class="lead">Integramos produtores rurais do Norte e do Sul do Vale do Araguaia para aumentar a competitividade, facilitar a comercialização e fortalecer o agronegócio regional.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="#historia">Nossa história <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+      <a class="btn btn-ghost" href="#contato">Fale conosco</a>
+      <a class="btn btn-ghost" href="#noticias">Notícias do agro</a>
+    </div>
+  </div>
+  <figure class="home-mapa">
+    <img src="img/mapa-atuacao.png" width="881" height="900" alt="Mapa de Goiás com os municípios da área de atuação da CODEVALE destacados em verde">
+    <figcaption><span class="mapa-legenda" aria-hidden="true"></span>Área de atuação da CODEVALE em Goiás</figcaption>
+  </figure>
+</div>
+</section>
+<section class="tab" id="historia" data-title="Nossa história | CODEVALE" aria-label="Nossa história" hidden>
+<div class="container history">
+  <div class="history-text">
+    <span class="eyebrow">História</span>
+    <h1>Nossa <span class="hl">história</span></h1>
+    <p class="lead">A CODEVALE foi fundada em fevereiro de 2026 pela união de produtores rurais do Norte e do Sul do Vale do Araguaia, com o propósito de aumentar a competitividade, facilitar a comercialização e fortalecer o agronegócio regional.</p>
+    <div class="founded">
+      <span class="founded-date">Fevereiro<br>2026</span>
+      <span class="founded-text"><strong>Fundação da CODEVALE</strong>Cooperativa de Desenvolvimento do Vale do Araguaia</span>
+    </div>
+  </div>
+  <div class="history-media">
+    <div class="media-switch" role="group" aria-label="Escolher mídia">
+      <button type="button" data-media="video" aria-pressed="true">Vídeo</button>
+      <button type="button" data-media="foto" aria-pressed="false">Foto</button>
+    </div>
+    <div class="media-box">
+      <video data-media-item="video" controls playsinline preload="none" poster="img/historia-video-capa.jpg" aria-label="Vídeo da reunião com cooperados">
+        <source src="video/codevale-reuniao.mp4" type="video/mp4">
+      </video>
+      <img data-media-item="foto" src="img/historia-cooperados.jpg" alt="Cooperados da CODEVALE reunidos em uma sala de reunião" width="1400" height="1050" loading="lazy" hidden>
+    </div>
+    <p class="media-caption">Reunião com cooperados</p>
+  </div>
+</div>
+</section>
+<section class="tab" id="negocios" data-title="Áreas de Negócio | CODEVALE" aria-label="Áreas de Negócio" hidden>
+<div class="container">
+  <span class="eyebrow">Áreas de Negócio</span>
+  <h1>Onde a cooperativa <span class="hl">atua</span></h1>
+  <p class="lead">Comercialização coletiva de animais, grãos e insumos, com mais poder de negociação para o cooperado.</p>
+  <!-- FOTOS: coloque as imagens em img/negocios/ com os nomes pecuaria.jpg, graos.jpg e fertilizantes.jpg.
+       Enquanto não houver foto, aparece o ícone da área sobre o fundo verde. -->
+  <div class="areas">
+    <div class="area" id="pecuaria">
+      <div class="area-foto">
+        <span class="area-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5c0 2 1 3 3 3M20 5c0 2-1 3-3 3"/><path d="M7 8h10l-1 6a4 4 0 01-4 4 4 4 0 01-4-4L7 8z"/><path d="M10 15h4"/><circle cx="10" cy="11" r=".6" fill="currentColor"/><circle cx="14" cy="11" r=".6" fill="currentColor"/><path d="M10 18v3M14 18v3"/></svg></span>
+        <img src="img/negocios/pecuaria.jpg" alt="Pecuária" loading="lazy" onerror="this.remove()">
+      </div>
+      <h2>Pecuária</h2>
+      <a class="area-email" href="mailto:comercialpecuaria@codevale.agr.br" data-assunto="Pecuária"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg><span>comercialpecuaria<wbr>@codevale.agr.br</span></a>
+    </div>
+    <div class="area" id="graos">
+      <div class="area-foto">
+        <span class="area-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22V8"/><path d="M12 8c0-3 2-5 2-5s2 2 2 4-2 3-4 3M12 8c0-3-2-5-2-5S8 5 8 7s2 3 4 3"/><path d="M12 14c2 0 4-1 4-3M12 14c-2 0-4-1-4-3M12 19c2 0 4-1 4-3M12 19c-2 0-4-1-4-3"/></svg></span>
+        <img src="img/negocios/graos.jpg" alt="Grãos" loading="lazy" onerror="this.remove()">
+      </div>
+      <h2>Grãos</h2>
+      <a class="area-email" href="mailto:comercialgraos@codevale.agr.br" data-assunto="Grãos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg><span>comercialgraos<wbr>@codevale.agr.br</span></a>
+    </div>
+    <div class="area" id="fertilizantes">
+      <div class="area-foto">
+        <span class="area-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h8l-1 3h-6L8 3z"/><path d="M9 6c-3 2-4 5-4 8v4a3 3 0 003 3h8a3 3 0 003-3v-4c0-3-1-6-4-8"/><path d="M9 14h6M12 11v6"/></svg></span>
+        <img src="img/negocios/fertilizantes.jpg" alt="Fertilizantes" loading="lazy" onerror="this.remove()">
+      </div>
+      <h2>Fertilizantes</h2>
+      <a class="area-email" href="mailto:comercialfertilizantes@codevale.agr.br" data-assunto="Fertilizantes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg><span>comercialfertilizantes<wbr>@codevale.agr.br</span></a>
+    </div>
+  </div>
+</div>
+</section>
+<section class="tab" id="noticias" data-title="Notícias | CODEVALE" aria-label="Notícias" hidden>
+<div class="container">
+  <div class="news-head">
+    <div>
+      <span class="eyebrow">Notícias</span>
+      <h1>Notícias do <span class="hl">agro</span></h1>
+    </div>
+    <div class="news-controls">
+      <div class="pager">
+        <button type="button" data-news-prev aria-label="Notícias mais recentes">←</button>
+        <button type="button" data-news-next aria-label="Notícias anteriores">→</button>
+      </div>
+    </div>
+  </div>
+  <div class="news-grid" data-news-list data-per-page="3"></div>
+</div>
+</section>
+<section class="tab" id="contato" data-title="Contato | CODEVALE" aria-label="Contato" hidden>
+<div class="container contact">
+  <div>
+    <span class="eyebrow">Contato</span>
+    <h1>Fale com a <span class="hl">cooperativa</span></h1>
+    <p class="lead">Escolha a área do seu assunto e envie um e-mail direto para a equipe responsável.</p>
+    <div class="contact-list">
+      <div class="contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><div><strong>Horário de atendimento</strong><span>Segunda a sexta, 8h às 17h</span></div></div>
+      <div class="contact-item contact-whats"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg><div><strong>WhatsApp</strong><a href="https://wa.me/556298406963?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20CODEVALE%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." target="_blank" rel="noopener">(62) 9840-6963</a></div></div>
+      <div class="contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg><div><strong>Quer ser cooperado?</strong><span>Fale com a diretoria pelo WhatsApp.</span></div></div>
+    </div>
+  </div>
+  <div class="contact-cards">
+      <div class="contact-card">
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span>
+        <div>
+          <h2>Diretoria</h2>
+        </div>
+        <a class="area-email whats-link" href="https://wa.me/556298406963?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20CODEVALE%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg><span>(62) 9840-6963</span></a>
+      </div>
+      <div class="contact-card">
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5c0 2 1 3 3 3M20 5c0 2-1 3-3 3"/><path d="M7 8h10l-1 6a4 4 0 01-4 4 4 4 0 01-4-4L7 8z"/><path d="M10 15h4"/><circle cx="10" cy="11" r=".6" fill="currentColor"/><circle cx="14" cy="11" r=".6" fill="currentColor"/><path d="M10 18v3M14 18v3"/></svg></span>
+        <div>
+          <h2>Comercial Pecuária</h2>
+        </div>
+        <a class="area-email" href="mailto:comercialpecuaria@codevale.agr.br" data-assunto="Pecuária"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg><span>comercialpecuaria<wbr>@codevale.agr.br</span></a>
+      </div>
+      <div class="contact-card">
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22V8"/><path d="M12 8c0-3 2-5 2-5s2 2 2 4-2 3-4 3M12 8c0-3-2-5-2-5S8 5 8 7s2 3 4 3"/><path d="M12 14c2 0 4-1 4-3M12 14c-2 0-4-1-4-3M12 19c2 0 4-1 4-3M12 19c-2 0-4-1-4-3"/></svg></span>
+        <div>
+          <h2>Comercial Grãos</h2>
+        </div>
+        <a class="area-email" href="mailto:comercialgraos@codevale.agr.br" data-assunto="Grãos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg><span>comercialgraos<wbr>@codevale.agr.br</span></a>
+      </div>
+      <div class="contact-card">
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h8l-1 3h-6L8 3z"/><path d="M9 6c-3 2-4 5-4 8v4a3 3 0 003 3h8a3 3 0 003-3v-4c0-3-1-6-4-8"/><path d="M9 14h6M12 11v6"/></svg></span>
+        <div>
+          <h2>Comercial Fertilizantes</h2>
+        </div>
+        <a class="area-email" href="mailto:comercialfertilizantes@codevale.agr.br" data-assunto="Fertilizantes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg><span>comercialfertilizantes<wbr>@codevale.agr.br</span></a>
+      </div>
+  </div>
+</div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <span>© <span data-year>2026</span> CODEVALE · Cooperativa de Desenvolvimento do Vale do Araguaia</span>
+    <span class="footer-contato"><a class="whats-link" href="https://wa.me/556298406963?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20CODEVALE%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg><span>(62) 9840-6963</span></a></span>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>

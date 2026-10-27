@@ -1,0 +1,35 @@
+# Configuração do Netlify (publica a branch "main" deste repositório)
+# A branch de produção é escolhida no painel: Project configuration > Build & deploy > Branches.
+
+[build]
+  # Publica só os arquivos do site (sem README, ferramentas/ etc.)
+  command = "rm -rf _publicar && mkdir _publicar && cp -r index.html robots.txt sitemap.xml css js img video _publicar/"
+  publish = "_publicar"
+  functions = "netlify/functions"
+  edge_functions = "netlify/edge-functions"
+
+# Endereço das notícias usado pela página: /api/agro-noticias
+[[redirects]]
+  from = "/api/agro-noticias"
+  to = "/.netlify/functions/agro-noticias"
+  status = 200
+
+# Segurança básica para todas as páginas
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
+    Strict-Transport-Security = "max-age=31536000"
+
+# Fotos e vídeo: guarda no navegador por 1 dia (trocar o arquivo com o mesmo nome aparece no dia seguinte)
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+[[headers]]
+  for = "/video/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
