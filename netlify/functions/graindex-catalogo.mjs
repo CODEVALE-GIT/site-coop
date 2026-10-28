@@ -40,14 +40,23 @@ export default async () => {
   const resultado = [];
   for (const f of fontes) {
     const id = f.slug || f.id;
-    const q = await pedir("/api/v1/quotes/" + encodeURIComponent(id));
-    const cotacoes = (q.status === 200 && q.corpo && q.corpo.quotes) || [];
+    const codigos = Array.isArray(f.symbols) ? f.symbols : [];
+    const cotacoes = [];
+    const erros = [];
+    // A API exige a lista de códigos (symbols); pede em lotes de 40
+    for (let i = 0; i < codigos.length; i += 40) {
+      const lote = codigos.slice(i, i + 40).join(",");
+      const q = await pedir("/api/v1/quotes/" + encodeURIComponent(id) + "?symbols=" + encodeURIComponent(lote));
+      if (q.status === 200 && q.corpo && q.corpo.quotes) cotacoes.push(...q.corpo.quotes);
+      else erros.push({ status: q.status, codigo: q.corpo && q.corpo.code, mensagem: q.corpo && q.corpo.message });
+    }
     resultado.push({
       fonte: id,
       id: f.id,
       nome: f.name,
       descricao: f.description,
-      status: q.status,
+      codigosNoCatalogo: codigos.length,
+      erros: erros.slice(0, 3),
       total: cotacoes.length,
       ativos: cotacoes.map((c) => ({
         codigo: c.symbol,
@@ -59,6 +68,8 @@ export default async () => {
         parado: c.stale || c.sessionStale || false,
         atualizado: c.lastUpdate || c.asOf || c.datetime,
       })),
+      // códigos que não voltaram com cotação (se houver)
+      semCotacao: codigos.filter((c) => !cotacoes.some((q) => q.symbol === c)).slice(0, 100),
     });
   }
   return json({ geradoEm: new Date().toISOString(), fontes: resultado });
