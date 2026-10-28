@@ -40,7 +40,20 @@ export default async () => {
   const resultado = [];
   for (const f of fontes) {
     const id = f.slug || f.id;
-    const codigos = Array.isArray(f.symbols) ? f.symbols : [];
+    let codigos = Array.isArray(f.symbols) ? f.symbols : [];
+    // Se o catálogo vier sem códigos (CBOT, B3, ICE), busca a lista e as famílias pela fonte
+    let familias = null;
+    let erroLista = null;
+    if (!codigos.length) {
+      const fam = await pedir("/api/v1/sources/" + encodeURIComponent(id) + "/families");
+      familias = fam.status === 200 ? fam.corpo : { status: fam.status, codigo: fam.corpo && fam.corpo.code, mensagem: fam.corpo && fam.corpo.message };
+      const sim = await pedir("/api/v1/sources/" + encodeURIComponent(id) + "/symbols");
+      if (sim.status === 200 && sim.corpo && Array.isArray(sim.corpo.symbols)) {
+        codigos = sim.corpo.symbols.map((x) => (typeof x === "string" ? x : x.symbol)).filter(Boolean);
+      } else {
+        erroLista = { status: sim.status, codigo: sim.corpo && sim.corpo.code, mensagem: sim.corpo && sim.corpo.message };
+      }
+    }
     const cotacoes = [];
     const erros = [];
     // A API exige a lista de códigos (symbols); pede em lotes de 40
@@ -56,11 +69,14 @@ export default async () => {
       nome: f.name,
       descricao: f.description,
       codigosNoCatalogo: codigos.length,
+      familias,
+      erroLista,
       erros: erros.slice(0, 3),
       total: cotacoes.length,
       ativos: cotacoes.map((c) => ({
         codigo: c.symbol,
         descricao: c.description,
+        familia: c.family,
         vencimento: c.maturity,
         ultimo: c.price,
         variacao: c.change,
