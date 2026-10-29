@@ -46,21 +46,66 @@ a { color: inherit; }
 .menu-toggle { display: none; width: 44px; height: 44px; border-radius: 10px; background: transparent; border: 1px solid var(--ink); color: var(--ink); cursor: pointer; place-items: center; }
 .menu-toggle svg { width: 22px; height: 22px; }
 
-/* Faixa de cotações
-   O widget do TradingView define a altura do próprio quadro e às vezes
-   fica baixo demais, cortando a linha da variação. A altura abaixo garante
-   espaço para nome, preço e variação. */
-.quotes-bar { background: var(--green); flex-shrink: 0; position: relative; height: 76px; overflow: hidden; } /* altura fixa: o widget às vezes cresce alguns pixels e fazia a página rolar */
-.quotes-bar .tradingview-widget-container { height: 76px; }
-/* Aviso mostrado enquanto o TradingView ainda não trouxe os valores */
+/* Faixa de cotações (dados da Graindex, montada pelo js/main.js)
+   Altura fixa para a página não "pular" quando as cotações chegam. A faixa rola sozinha
+   (para ao passar o mouse); quem pede menos movimento no sistema vê a faixa parada, com rolagem manual. */
+.quotes-bar { background: var(--green); flex-shrink: 0; position: relative; z-index: 40; height: 76px; color: #fff; }
+.topbar, .site-footer { flex-shrink: 0; }
+/* Aviso mostrado enquanto as cotações não chegam (ou se não chegarem) */
 .quotes-loading { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center;
   color: rgba(255,255,255,.75); font-size: .85rem; letter-spacing: .02em; pointer-events: none; transition: opacity .3s; }
 .quotes-loading::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; vertical-align: -1px;
   border: 2px solid rgba(255,255,255,.35); border-top-color: #fff; border-radius: 50%; animation: girar .8s linear infinite; }
+.quotes-bar.erro .quotes-loading::before { display: none; }
 @keyframes girar { to { transform: rotate(360deg); } }
 .quotes-bar.pronto .quotes-loading { opacity: 0; }
-.topbar, .site-footer { flex-shrink: 0; }
-.quotes-bar iframe { height: 76px !important; display: block; }
+.cot-faixa { height: 100%; overflow: hidden; }
+.cot-trilho { display: flex; width: max-content; height: 100%; animation: cot-rolar var(--dur, 60s) linear infinite; }
+.cot-faixa:hover .cot-trilho, .cot-faixa:focus-within .cot-trilho { animation-play-state: paused; }
+@keyframes cot-rolar { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.cot-lista { display: flex; list-style: none; height: 100%; }
+.cot { display: flex; flex-direction: column; justify-content: center; gap: 1px; padding: 0 22px; white-space: nowrap;
+  border-right: 1px solid rgba(255,255,255,.12); line-height: 1.25; }
+.cot-nome { font-size: .74rem; color: rgba(255,255,255,.72); letter-spacing: .01em; }
+.cot-nome b { font-weight: 600; color: rgba(255,255,255,.9); }
+.cot-valor { font-size: 1rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.cot-valor small { font-size: .68rem; font-weight: 500; color: rgba(255,255,255,.6); margin-left: 3px; }
+.cot-var { font-size: .76rem; font-weight: 600; font-variant-numeric: tabular-nums; color: rgba(255,255,255,.65); }
+.cot-var.sobe { color: #7EE29A; }
+.cot-var.cai { color: #FF8A80; }
+.cot-fonte { justify-content: center; font-size: .7rem; color: rgba(255,255,255,.6); }
+/* Cotação clicável (abre os próximos vencimentos) */
+.cot[data-chave] { cursor: pointer; transition: background .15s; }
+.cot[data-chave]:hover { background: rgba(255,255,255,.07); }
+.cot[data-chave]:focus-visible { outline: 2px solid var(--gold); outline-offset: -4px; }
+.quotes-bar.aberta .cot-trilho { animation-play-state: paused; }
+/* Janelinha dos vencimentos: abre logo abaixo da faixa, perto da cotação clicada */
+.cot-janela { position: absolute; top: calc(100% + 6px); left: 8px; width: 340px; max-height: min(420px, calc(var(--vh) - 180px)); overflow: auto;
+  background: #fff; color: var(--ink); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: 0 12px 32px rgba(60,45,2,.22); padding: 14px 16px 12px; }
+.cot-janela[hidden] { display: none; }
+.cot-janela:focus { outline: none; }
+.cot-janela-topo { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.cot-janela-topo strong { display: block; font-size: 1rem; line-height: 1.2; }
+.cot-janela-topo span { font-size: .75rem; color: var(--muted); }
+.cot-fechar { flex-shrink: 0; width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg);
+  color: var(--ink); font-size: 1.2rem; line-height: 1; cursor: pointer; }
+.cot-fechar:hover { background: var(--sand); }
+.cot-janela table { width: 100%; border-collapse: collapse; font-size: .85rem; font-variant-numeric: tabular-nums; }
+.cot-janela th, .cot-janela td { padding: 6px 4px; text-align: right; border-bottom: 1px solid #EFE7CC; white-space: nowrap; }
+.cot-janela th:first-child { text-align: left; }
+.cot-janela thead th { font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ocre); }
+.cot-janela tbody th { font-weight: 600; }
+.cot-janela td.cot-var { color: var(--muted); font-size: .8rem; }
+.cot-janela td.cot-var.sobe { color: #1E7B3A; }
+.cot-janela td.cot-var.cai { color: #B3261E; }
+.cot-janela tr.parado td, .cot-janela tr.parado th { color: #9A8D6A; }
+.cot-janela-nota { margin-top: 8px; font-size: .7rem; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) {
+  .cot-faixa { overflow-x: auto; }
+  .cot-trilho { animation: none; }
+  .cot-trilho .cot-lista + .cot-lista { display: none; }
+}
 
 /* ---------- Conteúdo: ocupa o espaço entre o topo e o rodapé ---------- */
 /* O conteúdo começa sempre na mesma altura em todas as abas (o título não "pula" ao trocar de aba)

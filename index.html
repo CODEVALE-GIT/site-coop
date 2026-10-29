@@ -15,11 +15,6 @@
 <meta property="og:url" content="https://www.codevale.agr.br/">
 <meta property="og:image" content="https://www.codevale.agr.br/img/og-codevale.jpg">
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
-<!-- Abre a conexão com o TradingView logo no início, para a faixa de cotações carregar mais rápido -->
-<link rel="preconnect" href="https://s3.tradingview.com">
-<link rel="preconnect" href="https://www.tradingview-widget.com">
-<link rel="preconnect" href="https://widgetdata.tradingview.com">
-<link rel="preload" href="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" as="script">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap" rel="stylesheet">
@@ -72,27 +67,8 @@
 </header>
 <div class="quotes-bar">
   <span class="quotes-loading" aria-hidden="true">Carregando cotações…</span>
-  <div class="tradingview-widget-container">
-    <div class="tradingview-widget-container__widget"></div>
-    <script src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-    {
-      "symbols": [
-        {"proName": "OANDA:SOYBNUSD", "title": "Soja Chicago (US$/bu)"},
-        {"proName": "BMFBOVESPA:CCM1!", "title": "Milho B3"},
-        {"proName": "BMFBOVESPA:BGI1!", "title": "Boi Gordo B3"},
-        {"proName": "FX_IDC:USDBRL", "title": "Dólar"},
-        {"proName": "BMFBOVESPA:SJCF2027/2.2046", "title": "Soja Jan/27 (US$/bu)"},
-        {"proName": "BMFBOVESPA:SJCH2027/2.2046", "title": "Soja Mar/27 (US$/bu)"},
-        {"proName": "BMFBOVESPA:SJCK2027/2.2046", "title": "Soja Mai/27 (US$/bu)"},
-        {"proName": "BMFBOVESPA:SJCN2027/2.2046", "title": "Soja Jul/27 (US$/bu)"}
-      ],
-      "showSymbolLogo": false,
-      "isTransparent": true,
-      "displayMode": "compact",
-      "colorTheme": "dark",
-      "locale": "br"
-    }
-    </script>
+  <div class="cot-faixa" role="region" aria-label="Cotações do mercado">
+    <div class="cot-trilho"></div>
   </div>
 </div>
 <main id="conteudo">

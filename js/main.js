@@ -168,18 +168,140 @@
     if (e.target.closest('.email-menu a')) setTimeout(fecharEmailMenu, 0);
   });
 
-  /* ---------- Faixa de cotações: tira o "Carregando…" quando o TradingView terminar ---------- */
+  /* ---------- Faixa de cotações (Graindex) ----------
+     Busca /api/cotacoes (função netlify/functions/cotacoes.mjs, onde fica a lista de cotações)
+     e monta a faixa. Atualiza a cada 2 minutos, só enquanto a aba do navegador estiver aberta.
+     Ao clicar numa cotação, abre uma janelinha com os próximos vencimentos; clicar fora (ou Esc) fecha. */
   (function () {
     var barra = document.querySelector('.quotes-bar');
-    if (!barra) return;
-    var feito = false;
-    var pronto = function () { if (!feito) { feito = true; barra.classList.add('pronto'); } };
-    // Quando o quadro do TradingView termina de carregar (o evento "load" é pego aqui mesmo que o
-    // TradingView troque o quadro), espera um pouco pelos valores e tira o aviso.
-    barra.addEventListener('load', function (e) {
-      if (e.target && e.target.tagName === 'IFRAME') setTimeout(pronto, 1500);
-    }, true);
-    setTimeout(pronto, 6000); // se o TradingView não responder, não deixa o aviso para sempre
+    var trilho = barra && barra.querySelector('.cot-trilho');
+    if (!trilho) return;
+    var aviso = barra.querySelector('.quotes-loading');
+    var COT_URL = '/api/cotacoes';
+    var INTERVALO = 2 * 60 * 1000;
+    var dados = null;
+
+    function num(v, casas) {
+      return Number(v).toLocaleString('pt-BR', { minimumFractionDigits: casas, maximumFractionDigits: casas });
+    }
+    function textoVariacao(c, casas) {
+      if (c.variacao == null) return '';
+      var sinal = c.variacao > 0 ? '+' : '';
+      return sinal + num(c.variacao, casas) + (c.variacaoPct == null ? '' : ' (' + sinal + num(c.variacaoPct, 2) + '%)');
+    }
+    function classeVariacao(c) { return c.variacao > 0 ? ' sobe' : (c.variacao < 0 ? ' cai' : ''); }
+
+    function cartao(c, copia) {
+      var abre = c.chave ? ' data-chave="' + esc(c.chave) + '" role="button" tabindex="' + (copia ? '-1' : '0') +
+        '" aria-haspopup="dialog" title="Ver próximos vencimentos"' : '';
+      return '<li class="cot"' + abre + '>' +
+        '<span class="cot-nome"><b>' + esc(c.nome) + '</b>' + (c.vencimento ? ' ' + esc(c.vencimento) : '') + '</span>' +
+        '<span class="cot-valor">' + num(c.preco, c.casas) + (c.unidade ? '<small>' + esc(c.unidade) + '</small>' : '') + '</span>' +
+        '<span class="cot-var' + classeVariacao(c) + '">' + (textoVariacao(c, c.casas) || '&nbsp;') + '</span>' +
+        '</li>';
+    }
+    function montar(d) {
+      dados = d;
+      var hora = d.atualizado ? new Date(d.atualizado).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '';
+      var fim = '<li class="cot cot-fonte">Fonte: Graindex' + (hora ? ' · ' + hora : '') + '</li>';
+      // A lista vai duas vezes para a faixa rolar sem emendas; a cópia fica escondida dos leitores de tela
+      trilho.innerHTML =
+        '<ul class="cot-lista">' + d.itens.map(function (c) { return cartao(c, false); }).join('') + fim + '</ul>' +
+        '<ul class="cot-lista" aria-hidden="true">' + d.itens.map(function (c) { return cartao(c, true); }).join('') + fim + '</ul>';
+      // Velocidade constante (cerca de 45 px por segundo), qualquer que seja o tamanho da lista
+      var largura = trilho.scrollWidth / 2;
+      trilho.style.setProperty('--dur', Math.max(20, Math.round(largura / 45)) + 's');
+      barra.classList.remove('erro');
+      barra.classList.add('pronto');
+      if (aberta) preencher(aberta); // janelinha aberta: atualiza os valores dela
+    }
+    function falhou() {
+      if (dados) return; // se já havia cotações na tela, mantém as últimas
+      barra.classList.add('erro');
+      if (aviso) aviso.textContent = 'Cotações indisponíveis no momento';
+    }
+    function carregar() {
+      if (!window.fetch) return falhou();
+      fetch(COT_URL)
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(function (d) { if (d && d.itens && d.itens.length) montar(d); else falhou(); })
+        .catch(falhou);
+    }
+
+    /* Janelinha com os próximos vencimentos */
+    var janela = document.createElement('div');
+    janela.className = 'cot-janela';
+    janela.setAttribute('role', 'dialog');
+    janela.setAttribute('aria-labelledby', 'cot-janela-titulo');
+    janela.tabIndex = -1;
+    janela.hidden = true;
+    barra.appendChild(janela);
+    var aberta = null, origem = null;
+
+    function preencher(chave) {
+      var f = dados && dados.futuros && dados.futuros[chave];
+      if (!f) return fechar();
+      var temParado = f.contratos.some(function (c) { return c.parado; });
+      janela.innerHTML =
+        '<div class="cot-janela-topo"><div><strong id="cot-janela-titulo">' + esc(f.nome) + '</strong>' +
+        '<span>Próximos vencimentos' + (f.unidade ? ' · ' + esc(f.unidade) : '') + '</span></div>' +
+        '<button type="button" class="cot-fechar" aria-label="Fechar">&times;</button></div>' +
+        '<table><thead><tr><th scope="col">Vencimento</th><th scope="col">Último</th><th scope="col">Variação</th></tr></thead><tbody>' +
+        f.contratos.map(function (c) {
+          return '<tr' + (c.parado ? ' class="parado"' : '') + '><th scope="row">' + esc(c.vencimento) + (c.parado ? '*' : '') + '</th>' +
+            '<td>' + num(c.preco, f.casas) + '</td>' +
+            '<td class="cot-var' + classeVariacao(c) + '">' + (textoVariacao(c, f.casas) || '–') + '</td></tr>';
+        }).join('') +
+        '</tbody></table>' +
+        '<p class="cot-janela-nota">' + (temParado ? '* Sem negócio hoje: preço de ajuste. ' : '') + 'Fonte: Graindex.</p>';
+    }
+    function posicionar(li) {
+      // Mede tudo relativo à faixa (funciona com o zoom do site em telas grandes)
+      var rb = barra.getBoundingClientRect(), rl = li.getBoundingClientRect();
+      var escala = rb.width / (barra.offsetWidth || rb.width) || 1;
+      var largura = barra.offsetWidth, w = Math.min(340, largura - 16);
+      var esq = (rl.left - rb.left) / escala;
+      janela.style.width = w + 'px';
+      janela.style.left = Math.max(8, Math.min(esq, largura - w - 8)) + 'px';
+    }
+    function abrir(li, peloTeclado) {
+      var chave = li.getAttribute('data-chave');
+      if (aberta === chave) return fechar();
+      aberta = chave;
+      origem = peloTeclado ? li : null;
+      preencher(chave);
+      posicionar(li);
+      janela.hidden = false;
+      barra.classList.add('aberta'); // pausa a faixa enquanto a janelinha estiver aberta
+      if (peloTeclado) janela.focus();
+    }
+    function fechar() {
+      if (!aberta) return;
+      aberta = null;
+      janela.hidden = true;
+      barra.classList.remove('aberta');
+      if (origem && document.body.contains(origem)) origem.focus();
+      origem = null;
+    }
+    trilho.addEventListener('click', function (e) {
+      var li = e.target.closest('.cot[data-chave]');
+      if (li) { e.stopPropagation(); abrir(li, false); }
+    });
+    trilho.addEventListener('keydown', function (e) {
+      var li = e.target.closest('.cot[data-chave]');
+      if (li && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); abrir(li, true); }
+    });
+    janela.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (e.target.closest('.cot-fechar')) fechar();
+    });
+    document.addEventListener('click', function () { fechar(); }); // clicar fora fecha
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') fechar(); });
+    window.addEventListener('resize', fechar);
+    window.addEventListener('hashchange', fechar);
+
+    carregar();
+    setInterval(function () { if (!document.hidden) carregar(); }, INTERVALO);
   })();
 
   /* ---------- Mede o cabeçalho, a faixa de cotações e o rodapé de verdade ----------
