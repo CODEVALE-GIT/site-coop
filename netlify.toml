@@ -1,0 +1,28 @@
+[build]
+  command = "rm -rf _publicar && mkdir _publicar && cp -r index.html robots.txt sitemap.xml css js img video _publicar/"
+  publish = "_publicar"
+  functions = "netlify/functions"
+  edge_functions = "netlify/edge-functions"
+
+[[redirects]]
+  from = "/api/agro-noticias"
+  to = "/.netlify/functions/agro-noticias"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
+    Strict-Transport-Security = "max-age=31536000"
+
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+[[headers]]
+  for = "/video/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
