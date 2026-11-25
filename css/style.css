@@ -90,11 +90,6 @@ a { color: inherit; }
 .cot-janela td.cot-var.cai { color: #B3261E; }
 .cot-janela tr.parado td, .cot-janela tr.parado th { color: #9A8D6A; }
 .cot-janela-nota { margin-top: 8px; font-size: .7rem; color: var(--muted); }
-@media (prefers-reduced-motion: reduce) {
-  .cot-faixa { overflow-x: auto; }
-  .cot-trilho { animation: none; }
-  .cot-trilho .cot-lista + .cot-lista { display: none; }
-}
 
 /* Conteúdo (--chrome é medido no main.js) */
 body { --chrome: 205px; --pad-min: 40px; --pad-bot: 28px; --pad-top: max(var(--pad-min), calc((var(--vh) - var(--chrome) - 340px) / 2)); }
@@ -147,7 +142,10 @@ h2 { font-weight: 800; font-stretch: 115%; font-size: 1.3rem; line-height: 1.2; 
 
 /* História */
 .history { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 40px; align-items: start; }
-.history-media { width: min(620px, calc(var(--vw) * .52), calc((var(--vh) - var(--chrome) - var(--pad-top) - var(--pad-bot) - 90px) * 16 / 9)); min-width: 0; justify-self: end; }
+.history-body p { color: var(--muted); font-size: .95rem; line-height: 1.55; max-width: 640px; }
+.history-body p + p { margin-top: .6em; }
+.history-media .founded { margin: 0 0 16px; width: 100%; }
+.history-media { width: min(540px, calc(var(--vw) * .42), calc((var(--vh) - var(--chrome) - var(--pad-top) - var(--pad-bot) - 90px) * 16 / 9)); min-width: 0; justify-self: end; }
 .media-switch { display: inline-flex; gap: 4px; background: var(--sand); padding: 4px; border-radius: 999px; margin-bottom: 10px; }
 .media-switch button { font: 700 .85rem var(--font); color: var(--ink); background: transparent; border: 0; padding: 6px 16px; border-radius: 999px; cursor: pointer; }
 .media-switch button[aria-pressed="true"] { background: var(--green); color: var(--bg); }
@@ -230,6 +228,8 @@ html.compacto body { --chrome: 177px; --pad-min: 22px; --pad-bot: 14px; }
 html.compacto .eyebrow { margin-bottom: 6px; }
 html.compacto h1 { font-size: clamp(1.6rem, calc(var(--vh) * .062), 2.8rem); margin-bottom: 10px; }
 html.compacto .lead { font-size: 1rem; }
+html.compacto .history-body p { font-size: .9rem; line-height: 1.48; }
+html.compacto .history-body p + p { margin-top: .5em; }
 html.compacto .actions { margin-top: 18px; }
 html.compacto .cards-2, html.compacto .cards-3 { margin-top: 16px; }
 html.compacto .card { padding: 18px 20px; }
@@ -309,6 +309,25 @@ html.baixo .parceiro img { max-height: 26px; }
   .lead, html.compacto .lead { font-size: .95rem; }
   .actions, html.compacto .actions { margin-top: 14px; }
   .home h1, html.compacto .home h1 { font-size: clamp(1.6rem, calc(var(--vw) * .034), 2.4rem); }
-  .history-media { width: min(620px, calc(var(--vw) * .44), calc((var(--vh) - var(--chrome) - var(--pad-top) - var(--pad-bot) - 90px) * 16 / 9)); }
+  .history-media { width: min(540px, calc(var(--vw) * .40), calc((var(--vh) - var(--chrome) - var(--pad-top) - var(--pad-bot) - 90px) * 16 / 9)); }
 }
 html.compacto .contact .lead { font-size: .95rem; }
+
+/* Conselhos */
+.conselhos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 22px; }
+.conselho { background: var(--sand); border-radius: var(--radius); border-top: 4px solid var(--gold); padding: 20px 22px; }
+.conselho h2 { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; color: var(--green); margin: 0 0 8px; }
+.conselho h2 svg { width: 22px; height: 22px; color: var(--ocre); flex-shrink: 0; }
+.conselho ul { list-style: none; }
+.conselho li { display: flex; flex-direction: column; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.conselho li:last-child { border-bottom: 0; padding-bottom: 0; }
+.conselho li strong { font-weight: 700; }
+.conselho li span { font-size: .88rem; color: var(--muted); }
+html.compacto .conselhos { margin-top: 12px; gap: 18px; }
+html.compacto .conselho { padding: 14px 18px; }
+html.compacto .conselho li { padding: 7px 0; }
+html.baixo .conselho li { padding: 4px 0; }
+@media (max-width: 900px) { .conselhos { grid-template-columns: 1fr; } }
+@media (min-width: 901px) {
+  body:has(#conselho:not([hidden])) { --pad-top: clamp(var(--pad-min), calc((var(--vh) - var(--chrome)) * .1), 72px); }
+}
