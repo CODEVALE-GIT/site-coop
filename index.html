@@ -14,12 +14,14 @@
 <meta property="og:description" content="CODEVALE, Cooperativa de Desenvolvimento do Vale do Araguaia. Integramos produtores rurais do Vale do Araguaia goiano para desenvolver a região.">
 <meta property="og:url" content="https://www.codevale.agr.br/">
 <meta property="og:image" content="https://www.codevale.agr.br/img/og-codevale.jpg">
-<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="img/favicon-48.png" type="image/png" sizes="48x48">
+<link rel="icon" href="img/favicon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap" rel="stylesheet">
 <script>
-/* zoom em telas grandes; .compacto/.baixo em telas baixas */
+/* zoom em telas grandes; .compacto/.curto/.baixo em telas baixas */
 (function () {
   var d = document.documentElement;
   function ajustar() {
@@ -28,6 +30,7 @@
     window.CODEVALE_ZOOM = z;
     d.style.setProperty('--z', z);
     d.classList.toggle('compacto', w > 900 && h / z <= 820);
+    d.classList.toggle('curto', w > 900 && h / z <= 680);
     d.classList.toggle('baixo', w > 900 && h / z <= 600);
   }
   ajustar();
@@ -44,6 +47,15 @@
   "url": "https://www.codevale.agr.br/",
   "logo": "https://www.codevale.agr.br/img/logo-codevale.png",
   "telephone": "+55 62 9840-6963"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Codevale",
+  "alternateName": "Cooperativa de Desenvolvimento do Vale do Araguaia",
+  "url": "https://www.codevale.agr.br/"
 }
 </script>
 </head>

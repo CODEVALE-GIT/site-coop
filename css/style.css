@@ -145,7 +145,7 @@ h2 { font-weight: 800; font-stretch: 115%; font-size: 1.3rem; line-height: 1.2; 
 .history-body p { color: var(--muted); font-size: .95rem; line-height: 1.55; max-width: 640px; }
 .history-body p + p { margin-top: .6em; }
 .history-media .founded { margin: 0 0 16px; width: 100%; }
-.history-media { width: min(540px, calc(var(--vw) * .42), calc((var(--vh) - var(--chrome) - var(--pad-top) - var(--pad-bot) - 90px) * 16 / 9)); min-width: 0; justify-self: end; }
+.history-media { width: min(540px, calc(var(--vw) * .42), max(380px, calc((var(--vh) - var(--chrome) - var(--pad-min) - var(--pad-bot) - 240px) * 16 / 9))); min-width: 0; justify-self: end; }
 .media-switch { display: inline-flex; gap: 4px; background: var(--sand); padding: 4px; border-radius: 999px; margin-bottom: 10px; }
 .media-switch button { font: 700 .85rem var(--font); color: var(--ink); background: transparent; border: 0; padding: 6px 16px; border-radius: 999px; cursor: pointer; }
 .media-switch button[aria-pressed="true"] { background: var(--green); color: var(--bg); }
@@ -247,6 +247,22 @@ html.compacto .contact-card { padding: 10px 16px; }
 html.compacto .contact-card .ico { width: 38px; height: 38px; }
 html.compacto .founded { margin-top: 18px; padding: 14px 20px 14px 14px; }
 html.compacto .site-footer .container { min-height: 40px; padding-top: 6px; padding-bottom: 6px; }
+html.curto .history-body p { font-size: .84rem; line-height: 1.42; }
+html.curto .history-body p + p { margin-top: .4em; }
+html.curto .history-media .founded { margin-bottom: 10px; padding: 10px 16px 10px 10px; }
+html.curto .founded-date { padding: 8px 12px; font-size: .95rem; }
+html.curto .founded { gap: 12px; }
+html.curto .founded-text { font-size: .82rem; line-height: 1.35; }
+html.curto .founded-text strong { font-size: .95rem; }
+html.curto .media-switch { margin-bottom: 6px; }
+html.curto .media-switch button { padding: 4px 14px; }
+html.curto .media-caption { margin-top: 3px; }
+html.curto .conselho { padding: 12px 18px; }
+html.curto .conselho h2 { margin-bottom: 4px; }
+html.curto .conselho li { padding: 3px 0; line-height: 1.4; }
+html.curto .conselho li span { font-size: .8rem; }
+html.curto .conselhos { margin-top: 8px; }
+html.baixo .history-body p { font-size: .8rem; line-height: 1.4; }
 html.baixo .contact-list { margin-top: 4px; }
 html.baixo .contact-item { padding: 4px 0; }
 html.baixo .contact .lead { margin-top: 6px; }
@@ -309,7 +325,7 @@ html.baixo .parceiro img { max-height: 26px; }
   .lead, html.compacto .lead { font-size: .95rem; }
   .actions, html.compacto .actions { margin-top: 14px; }
   .home h1, html.compacto .home h1 { font-size: clamp(1.6rem, calc(var(--vw) * .034), 2.4rem); }
-  .history-media { width: min(540px, calc(var(--vw) * .40), calc((var(--vh) - var(--chrome) - var(--pad-top) - var(--pad-bot) - 90px) * 16 / 9)); }
+  .history-media { width: min(540px, calc(var(--vw) * .40), max(380px, calc((var(--vh) - var(--chrome) - var(--pad-min) - var(--pad-bot) - 240px) * 16 / 9))); }
 }
 html.compacto .contact .lead { font-size: .95rem; }
 
