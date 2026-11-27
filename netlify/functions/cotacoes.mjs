@@ -1,16 +1,12 @@
 // Cotações da Graindex para a faixa do topo (/api/cotacoes).
 // Chave em API_COTACOES (Netlify). Cache de 2 min.
 
-// Só os contratos listados aparecem; vencido sai da faixa.
+// quantos: os próximos contratos em aberto de cada produto (vencido sai e o seguinte entra)
 export const ITENS = [
-  { nome: "Soja Chicago", fonte: "cbot", raiz: "ZS", unidade: "US$/bu", divisor: 100, casas: 2,
-    contratos: ["ZSH7", "ZSK7", "ZSN7"] },                                  // mar, mai, jul/2027
-  { nome: "Milho Chicago", fonte: "cbot", raiz: "ZC", unidade: "US$/bu", divisor: 100, casas: 2,
-    contratos: ["ZCH7", "ZCK7", "ZCN7"] },                                  // mar, mai, jul/2027
-  { nome: "Milho B3", fonte: "b3", raiz: "CCM", unidade: "R$/sc", casas: 2,
-    contratos: ["CCMF27", "CCMH27", "CCMK27"] },                            // jan, mar, mai/2027
-  { nome: "Boi Gordo B3", fonte: "b3", raiz: "BGI", unidade: "R$/@", casas: 2,
-    contratos: ["BGIV26", "BGIX26", "BGIZ26", "BGIF27", "BGIG27", "BGIH27"] }, // out/2026 a mar/2027
+  { nome: "Soja Chicago", fonte: "cbot", raiz: "ZS", unidade: "US$/bu", divisor: 100, casas: 2, quantos: 3 },
+  { nome: "Milho Chicago", fonte: "cbot", raiz: "ZC", unidade: "US$/bu", divisor: 100, casas: 2, quantos: 3 },
+  { nome: "Milho B3", fonte: "b3", raiz: "CCM", unidade: "R$/sc", casas: 2, quantos: 3 },
+  { nome: "Boi Gordo B3", fonte: "b3", raiz: "BGI", unidade: "R$/@", casas: 2, quantos: 6 },
   { nome: "Dólar comercial", fonte: "cambio", codigo: "DOL COM", unidade: "R$", casas: 4,
     futuro: { nome: "Dólar futuro B3", fonte: "b3", raiz: "DOL", unidade: "R$", divisor: 1000, casas: 4 } },
 ];
@@ -101,10 +97,7 @@ export function montarFaixa(itens, cotacoesPorFonte, agora) {
     if (item.codigo) {
       escolhidas = cot.filter((q) => q.symbol === item.codigo && typeof q.price === "number");
     } else {
-      escolhidas = (item.contratos || [])
-        .map((cod) => cot.find((q) => q.symbol === cod))
-        .filter((q) => q && typeof q.price === "number" && q.price > 0 && q.isValid !== false && !q.stale &&
-          (!q.exerciseDate || q.exerciseDate >= hoje));
+      escolhidas = contratosDe(item, cot, hoje).filter((q) => !q.stale).slice(0, item.quantos || 3);
     }
     const prodFut = item.codigo ? item.futuro : item;
     let chave = null;
@@ -149,7 +142,7 @@ export default async () => {
   const porFonte = {};
   const juntar = (fonte, lista) => { (porFonte[fonte] = porFonte[fonte] || new Set()); lista.forEach((c) => porFonte[fonte].add(c)); };
   for (const item of ITENS) {
-    juntar(item.fonte, item.codigo ? [item.codigo] : [...(item.contratos || []), ...codigosDe(item, agora)]);
+    juntar(item.fonte, item.codigo ? [item.codigo] : codigosDe(item, agora));
     if (item.codigo && item.futuro) juntar(item.futuro.fonte, codigosDe(item.futuro, agora));
   }
   const fontes = Object.keys(porFonte);

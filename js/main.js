@@ -319,6 +319,59 @@
     setTimeout(medir, 3000);
   })();
 
+  // cartão de aviso (planilha do Google, via /api/avisos)
+  (function () {
+    var CHAVE = 'codevale-aviso-fechado';
+    function lido(id) { try { return localStorage.getItem(CHAVE) === id; } catch (e) { return false; } }
+    function marcar(id) { try { localStorage.setItem(CHAVE, id); } catch (e) {} }
+    function mostrar(a) {
+      var paragrafos = (a.texto || '').split(/\n+/).filter(Boolean).map(function (t) { return '<p>' + esc(t) + '</p>'; }).join('');
+      var fundo = document.createElement('div');
+      fundo.className = 'aviso-fundo';
+      fundo.innerHTML =
+        '<div class="aviso-card' + (a.imagem ? '' : ' sem-foto') + '" role="dialog" aria-modal="true" aria-labelledby="aviso-titulo">' +
+          '<button type="button" class="aviso-x" aria-label="Fechar">&times;</button>' +
+          (a.imagem ? '<div class="aviso-foto"><img src="' + esc(a.imagem) + '" alt="" referrerpolicy="no-referrer"></div>' : '') +
+          '<div class="aviso-corpo">' +
+            '<span class="aviso-tag">Comunicado</span>' +
+            '<h2 id="aviso-titulo">' + esc(a.titulo) + '</h2>' +
+            (a.data ? '<p class="aviso-data">' + esc(a.data) + '</p>' : '') +
+            (paragrafos ? '<div class="aviso-texto">' + paragrafos + '</div>' : '') +
+            '<div class="aviso-acoes">' +
+              (a.link ? '<a class="btn btn-primary aviso-link" href="' + esc(a.link) + '" target="_blank" rel="noopener">Saiba mais</a>' : '') +
+              '<button type="button" class="btn btn-ghost aviso-fechar">Fechar</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      var img = fundo.querySelector('.aviso-foto img');
+      if (img) img.addEventListener('error', function () { img.parentNode.remove(); fundo.querySelector('.aviso-card').classList.add('sem-foto'); });
+      var antes = document.activeElement;
+      function fechar() {
+        marcar(a.id);
+        fundo.remove();
+        document.removeEventListener('keydown', tecla);
+        if (antes && antes.focus) antes.focus();
+      }
+      function tecla(e) { if (e.key === 'Escape') fechar(); }
+      fundo.addEventListener('click', function (e) {
+        if (e.target === fundo || e.target.closest('.aviso-x, .aviso-fechar')) fechar();
+      });
+      var link = fundo.querySelector('.aviso-link');
+      if (link) link.addEventListener('click', function () { marcar(a.id); });
+      document.addEventListener('keydown', tecla);
+      document.body.appendChild(fundo);
+      if (window.innerWidth > 700) fundo.querySelector('.aviso-x').focus({ preventScroll: true });
+    }
+    function carregar() {
+      fetch('/api/avisos')
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (d) { if (d && d.aviso && d.aviso.id && !lido(d.aviso.id)) mostrar(d.aviso); })
+        .catch(function () {});
+    }
+    if (document.readyState === 'complete') setTimeout(carregar, 600);
+    else window.addEventListener('load', function () { setTimeout(carregar, 600); });
+  })();
+
   // ano no rodapé
   document.querySelectorAll('[data-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); });
 })();

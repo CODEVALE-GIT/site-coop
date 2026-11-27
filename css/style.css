@@ -347,3 +347,35 @@ html.baixo .conselho li { padding: 4px 0; }
 @media (min-width: 901px) {
   body:has(#conselho:not([hidden])) { --pad-top: clamp(var(--pad-min), calc((var(--vh) - var(--chrome)) * .1), 72px); }
 }
+
+/* Cartão de aviso */
+.aviso-fundo { position: fixed; inset: 0; z-index: 300; background: rgba(30, 22, 0, .55); display: flex; align-items: center; justify-content: center; padding: 20px; }
+.aviso-card { position: relative; width: min(560px, 100%); max-height: calc(var(--vh) - 40px); display: flex; flex-direction: column; background: var(--bg); border-radius: 16px; overflow: hidden; box-shadow: 0 24px 60px rgba(0, 0, 0, .35); }
+.aviso-foto { flex-shrink: 0; height: clamp(120px, calc(var(--vh) * .28), 240px); background: var(--green); }
+.aviso-foto img { width: 100%; height: 100%; object-fit: cover; }
+.aviso-corpo { padding: 22px 26px 24px; overflow-y: auto; }
+.aviso-tag { display: inline-block; background: var(--gold); color: var(--ink); font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 3px 9px; border-radius: 6px; margin-bottom: 10px; }
+.aviso-corpo h2 { font-size: 1.5rem; line-height: 1.15; margin-bottom: 6px; padding-right: 28px; }
+.aviso-card:not(.sem-foto) h2 { padding-right: 0; }
+.aviso-data { font-weight: 700; color: var(--ocre); font-size: .9rem; margin-bottom: 8px; }
+.aviso-texto p { color: var(--muted); }
+.aviso-texto p + p { margin-top: .5em; }
+.aviso-acoes { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.aviso-acoes .btn { padding: 10px 22px; }
+.aviso-x { position: absolute; top: 10px; right: 10px; z-index: 1; width: 36px; height: 36px; border-radius: 50%; border: 0; background: rgba(255, 255, 255, .92); font-size: 1.4rem; line-height: 1; color: var(--ink); cursor: pointer; }
+.aviso-card.sem-foto .aviso-x { background: var(--sand); }
+@media (max-width: 700px) {
+  .aviso-fundo { background: none; align-items: flex-end; padding: 12px; pointer-events: none; }
+  .aviso-card { pointer-events: auto; flex-direction: row; border: 1px solid var(--line); max-height: none; }
+  .aviso-foto { width: 96px; height: auto; }
+  .aviso-corpo { padding: 12px 40px 12px 14px; overflow: visible; }
+  .aviso-tag { margin-bottom: 4px; font-size: .62rem; }
+  .aviso-corpo h2, .aviso-card:not(.sem-foto) h2 { font-size: 1rem; padding-right: 0; margin-bottom: 2px; }
+  .aviso-data { font-size: .78rem; margin-bottom: 0; }
+  .aviso-texto { margin-top: 4px; font-size: .85rem; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .aviso-texto p + p { margin-top: 0; }
+  .aviso-acoes { margin-top: 8px; }
+  .aviso-acoes .btn { padding: 6px 14px; font-size: .85rem; }
+  .aviso-fechar { display: none; }
+  .aviso-x { top: 6px; right: 6px; width: 30px; height: 30px; font-size: 1.2rem; background: var(--sand); }
+}
